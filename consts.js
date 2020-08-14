@@ -1,0 +1,103 @@
+const defaultWarehouses = {
+    CONSUMPTION: {
+      id: 'bc126be5-adb7-48ca-b0e4-168c1937933d',
+      name: 'Consumption',
+      is_logical: true,
+      is_chain: false,
+    },
+    PURCHASE: {
+      id: '43acb9f2-a79a-4120-9935-660fd96921a0',
+      name: 'Purchase',
+      is_logical: true,
+      is_source: true,
+      is_not_purchase: false,
+      is_chain: false,
+    },
+    LOSS: {
+      id: 'd837a204-348a-467c-8fb9-e5b4f2d4cfb6',
+      name: 'Loss',
+      is_logical: true,
+      is_lack_reason: true,
+      is_chain: false,
+    },
+    DAMAGE: {
+      id:  '89e2a6bd-482d-4c05-b51f-afa70a92dbf7',
+      name: 'Damage',
+      is_logical: true,
+      is_entry: true,
+      is_chain: false,
+    },
+    EXPIRED_GOODS: {
+      id: 'b5e4c8aa-df74-42ae-ab96-27c0928c3736',
+      name: 'Expired Goods',
+      is_logical: true,
+      is_lack_reason: true,
+      is_chain: false,
+    },
+    CENTRAL_WAREHOUSE: {
+      id: '6aac9d2a-0bf6-493a-b89a-6104334ba1f1',
+      name: 'Central Warehouse',
+      is_logical: false,
+      is_entry: true,
+      is_chain: false,
+    },
+    BENCH_STOCK: {
+      id: 'afa71db0-06eb-4050-9251-d3d132559393',
+      name: 'Bench Stock',
+      is_logical: false,
+      is_consumption_origin: true,
+      is_chain: false,
+    },
+    INVENTORY_TAKING: {
+      id: '9aa99460-515f-4815-a119-dcdb3d209f5a',
+      name: 'Inventory Taking',
+      is_logical: true,
+      is_chain: false,
+    },
+    MISTAKE: {
+      id: '28cb8026-5e8a-11e9-8647-d663bd873d93',
+      name: 'Mistake',
+      is_logical: true,
+      is_extra_reason: true,
+      is_chain: false,
+    },
+    FOUND: {
+      id: '50fd0863-3dc8-46c1-82a4-bce5cfa35777',
+      name: 'Found',
+      is_source: true,
+      is_logical: true,
+      is_chain: false,
+    },
+    CHARITY: {
+      id: '37702f60-6649-4e04-9698-328ba6cf5703',
+      name: 'Charity',
+      is_source: true,
+      is_logical: true,
+      is_chain: false,
+    },
+    OTHERS: {
+      id: '2300b27f-a5d2-4687-a47a-5944a44a7c40',
+      name: 'Others',
+      is_source: true,
+      is_logical: true,
+      is_extra_reason: true,
+      is_chain: false,
+    },
+    DISCOUNT: {
+      id: '6d021a2a-1fdc-11ea-a5e8-2e728ce88125',
+      name: 'Discount',
+      is_source: true,
+      is_logical: true,
+      is_chain: false,
+    },
+    COMMODITY_WARD: {
+      id: '0d17e396-1fdd-11ea-978f-2e728ce88125',
+      name: 'Commodity ward',
+      is_source: true,
+      is_logical: true,
+      is_chain: false,
+    },
+  }; 
+  module.exports = {
+      defaultWarehouses
+  }
