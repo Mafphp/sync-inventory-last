@@ -65,3 +65,4 @@ received_insert
 received_sync
 sent
 logs
+.env
