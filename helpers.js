@@ -162,6 +162,12 @@ async function upsert(values, condition, tableName) {
     const Model = require(`./models/${tableName}.model`);
     const model = Model.model();
     return db.sequelize().transaction(async () => {
+      if (tableName === 'price_quote' && values.is_preferred === '1') {
+        // update another price_quote of this product set is_preferred to false
+        const PriceQuote = require('./models/price_quote.model');
+        const allPriceQuotes = await PriceQuote.model().findAll({where: {product_id: values.product_id}});
+        await Promise.all(allPriceQuotes.map(x => PriceQuote.model().update({is_preferred: false}, {where: {id: x.id}})));
+      }
       const obj = await model.findOne({ where: condition });
       if(obj) {
         if (tableName === 'stock_transaction' && !isClinic) {
@@ -232,12 +238,6 @@ const convertOriginAndDestinationWarehouse = (data, tableName, destination_wareh
           element['warehouse_id'] = CENTRAL_WAREHOUSE_ID;
         }
       }
-      // if (clinicsIds.includes(element['origin_id'])) {
-      //   element['origin_id'] = CENTRAL_WAREHOUSE_ID;
-      // }
-      // if (clinicsIds.includes(element['dest_id'])) {
-      //   element['dest_id'] = CENTRAL_WAREHOUSE_ID;
-      // }
     }
     // from clinic to chain
     if (isClinic) {
