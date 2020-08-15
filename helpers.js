@@ -5,6 +5,7 @@ const util = require('util');
 const path = require('path');
 const SetTransactionAsVerified = require('./calculate_moving_price/setTransactionAsVerified');
 const { isClinic, aggregateServers, scp_enabled, CONSUMPTION_ID, CENTRAL_WAREHOUSE_ID, BENCH_STOCK_ID, table_names, clinics} = require('./consts');
+const { center_name } = require('./env');
 
 function generateCode4CharAZ(element) {
   if (!element) return 'AAAA';
@@ -245,7 +246,7 @@ const convertOriginAndDestinationWarehouse = (data, tableName, destination_wareh
           element[key] = CONSUMPTION_ID;
         }
         if (element[key] === CENTRAL_WAREHOUSE_ID) {
-          element[key] = aggregateServers[target_name.toUpperCase()].warehouse_id;
+          element[key] = aggregateServers[center_name.toUpperCase()].warehouse_id;
         }
       });
     }
