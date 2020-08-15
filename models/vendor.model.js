@@ -9,11 +9,6 @@ const init = (seq) => {
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4,
     },
-    // serial: {
-    //   unique: true,
-    //   type: Sequelize.INTEGER,
-    //   autoIncrement: true,
-    // },
     name: {
       type: Sequelize.STRING,
       unique: true,

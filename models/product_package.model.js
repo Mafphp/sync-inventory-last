@@ -15,7 +15,10 @@ const init = (seq) => {
     convert_factor: {
       type: Sequelize.FLOAT,
       allowNull: true
-    }, 
+    },
+    product_id: {
+      type: Sequelize.UUID,
+    }
   }, {
       tableName: 'product_package',
       timestamps: false,

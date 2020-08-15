@@ -24,6 +24,12 @@ const init = (seq) => {
       unique: true,
       allowNull: false,
     },
+    product_type_id: {
+      type: Sequelize.UUID,
+    },
+    product_unit_id: {
+        type: Sequelize.UUID,
+    }
   }, {
       tableName: tableName,
       timestamps: false,

@@ -31,6 +31,9 @@ const init = (seq) => {
       type: Sequelize.DATE,
       defaultValue: Sequelize.NOW,
       allowNull: false
+    },
+    stock_transaction_id: {
+      type: Sequelize.UUID,
     }
   }, {
       tableName: 'import',

@@ -28,6 +28,12 @@ const init = (seq) => {
     },
     comments: {
       type: Sequelize.STRING
+    },
+    product_id: {
+      type: Sequelize.UUID
+    },
+    seller_id: {
+      type: Sequelize.UUID
     }
   }, {
       tableName: 'price_quote',

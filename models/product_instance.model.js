@@ -16,7 +16,13 @@ const init = (seq) => {
       type: Sequelize.STRING,
       unique: true,
       allowNull: false,
-    }
+    },
+    product_id: {
+      type: Sequelize.UUID,
+    },
+    vendor_id: {
+        type: Sequelize.UUID,
+    },
   }, {
       tableName: 'product_instance',
       timestamps: false,

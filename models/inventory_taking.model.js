@@ -24,6 +24,15 @@ const init = (seq) => {
     days_to_end: {
       type: Sequelize.INTEGER,
     },
+    product_instance_id: {
+      type: Sequelize.UUID,
+    },
+    warehouse_id: {
+        type: Sequelize.UUID,
+    },
+    stock_transaction_id: {
+        type: Sequelize.UUID,
+    }
   }, {
     tableName: 'inventory_taking',
     timestamps: false,

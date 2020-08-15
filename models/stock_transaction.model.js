@@ -29,9 +29,20 @@ const init = (seq) => {
       type: Sequelize.BOOLEAN,
       defaultValue: null
     },
+    product_package_id: {
+      type: Sequelize.UUID,
+      allowNull: true,
+    },
     product_instance_id: {
       type: Sequelize.UUID,
-    }
+      allowNull: true,
+    },
+    origin_id: {
+      type: Sequelize.UUID,
+    },
+    dest_id: {
+      type: Sequelize.UUID,
+    },
   }, {
       tableName: 'stock_transaction',
       timestamps: true,

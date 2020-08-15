@@ -20,7 +20,16 @@ const init = (seq) => {
     },
     stock_transaction_id: {
       type: Sequelize.UUID,
-    }
+    },
+    price_quote_id: {
+      type: Sequelize.UUID,
+    },
+    product_id: {
+        type: Sequelize.UUID,
+    },
+    import_id: {
+        type: Sequelize.UUID,
+    },
   }, {
       tableName: 'stock_price',
       timestamps: false,
