@@ -222,8 +222,8 @@ const initDirectory = async () => {
 }
 
 // schedule tasks to be run on the server
-// cron.schedule(`*/${EVERY_FEW_SECONDS} * * * * *`, async function() {
-  (async () => {
+cron.schedule(`*/${EVERY_FEW_SECONDS} * * * * *`, async function() {
+  // ( () => {
   if (isInit) {
     await initDirectory();
     db.useMainDB();
@@ -249,8 +249,8 @@ const initDirectory = async () => {
       logger.error(err);
       console.error(err)
   }
-})();
-// })
+// })();
+})
 
 
 app.listen(PORT, () => console.log(`${center_name} listen to port ${PORT}`));
