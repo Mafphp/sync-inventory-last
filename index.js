@@ -1,21 +1,4 @@
 const db = require('./models/index');
-// const User = require('./models/user.model');
-// const SetTransactionVerify = require('./calculate_moving_price/setTransactionAsVerified');
-
-
-// (async () => {
-//     db.useMainDB();
-//     await db.isReady();
-//     // const users = await User.model().findAll({});
-//     // console.log(users.map(u => u.id));
-//     try {
-//         const setTransactionVerify = new SetTransactionVerify();
-//         await setTransactionVerify.verify('b195eb02-c227-41a5-9751-4d8ede56d26c')
-//     } catch (error) {
-//         console.log(error);
-//     }
-// })()
-
 const cron = require("node-cron");
 const express = require("express");
 const path = require("path");
@@ -45,7 +28,6 @@ const {
   makeDirectory,
   sendFile
 } = require('./helpers');;
-// const db = require('./models/index');
 const app = express();
 const logger = require("./logger").Logger;
 
@@ -150,6 +132,7 @@ const getTablesNeedToSyncToRelevantServer = async ({origin = {}, destination = [
       }
     }
   }
+  return sent_directory_files.length;
 }
 const readDirectoryFilesAndUpdateSyncAt = async (sync_directory_path) => {
   // read directory received
@@ -164,6 +147,7 @@ const readDirectoryFilesAndUpdateSyncAt = async (sync_directory_path) => {
       console.error('an error occurred during read received directory');
     }
   }
+  return received_sync_directory_files.length;
 }
 const readDirectoryFilesAndInsertRecords = async (insert_directory_path) => {
   const received_directory_files = await readFilesFromDirectory(insert_directory_path);
@@ -212,6 +196,7 @@ const readDirectoryFilesAndInsertRecords = async (insert_directory_path) => {
     }
 
   }
+  return received_directory_files.length;
 }
 
 let isInit = true;
@@ -223,7 +208,6 @@ const initDirectory = async () => {
 
 // schedule tasks to be run on the server
 cron.schedule(`*/${EVERY_FEW_SECONDS} * * * * *`, async function() {
-  // ( () => {
   if (isInit) {
     await initDirectory();
     db.useMainDB();
@@ -232,24 +216,29 @@ cron.schedule(`*/${EVERY_FEW_SECONDS} * * * * *`, async function() {
   }
   try {
     if (isClinic) {
-      await readDirectoryFilesAndUpdateSyncAt(received_sync_directory);
-      await readDirectoryFilesAndInsertRecords(received_insert_directory);
-      await getTablesNeedToSyncToRelevantServer({origin: currentServer, destination: objectToArray(chain)});
-     console.log('===========================================');
-     logger.info('clinic successfully');
+      console.log(`***** CLINIC cron-job started running at: ${new Date()}`);
+      const sync_files_count = await readDirectoryFilesAndUpdateSyncAt(received_sync_directory);
+      console.log(`${sync_files_count} files synced`);
+      const insert_files_count = await readDirectoryFilesAndInsertRecords(received_insert_directory);
+      console.log(`${insert_files_count} files inserted`);
+      const sent_files_count = await getTablesNeedToSyncToRelevantServer({origin: currentServer, destination: objectToArray(chain)});
+      console.log(`${sent_files_count} files sents`);
+      console.log(`***** CLINIC cron-job finished at: ${new Date()}`);
     }
     if (!isClinic) {
-      await readDirectoryFilesAndUpdateSyncAt(received_sync_directory);
-      await readDirectoryFilesAndInsertRecords(received_insert_directory);
-      await getTablesNeedToSyncToRelevantServer({origin: currentServer, destination: objectToArray(clinics)});
-      console.log('-------------------------')
-      logger.info('chain successfully');
+      console.log(`***** CHAIN cron-job started running at: ${new Date()}`);
+      const sync_files_count = await readDirectoryFilesAndUpdateSyncAt(received_sync_directory);
+      console.log(`${sync_files_count} files synced`);
+      const insert_files_count = await readDirectoryFilesAndInsertRecords(received_insert_directory);
+      console.log(`${insert_files_count} files inserted`);
+      const sent_files_count = await getTablesNeedToSyncToRelevantServer({origin: currentServer, destination: objectToArray(clinics)});
+      console.log(`${sent_files_count} files sents`);
+      console.log(`***** CHAIN cron-job finished at: ${new Date()}`);
     }
   } catch (err) {
       logger.error(err);
       console.error(err)
   }
-// })();
 })
 
 
