@@ -127,7 +127,7 @@ const getTablesNeedToSyncToRelevantServer = async ({origin = {}, destination = [
         await deleteFiles([send_file_path])
       } catch (error) {
         await deleteFiles([send_file_path])
-        console.error(`${server.name}, ${path.basename(file_path).split('-')[2]}=> an error occurred on transferring files`);
+        // console.error(`${server.name}, ${path.basename(file_path).split('-')[2]}=> an error occurred on transferring files`);
         logger.error(`${server.name}, ${path.basename(file_path).split('-')[2]}=> an error occurred on transferring files`);
       }
     }
@@ -218,21 +218,21 @@ cron.schedule(`*/${EVERY_FEW_SECONDS} * * * * *`, async function() {
     if (isClinic) {
       console.log(`***** CLINIC cron-job started running at: ${new Date()}`);
       const sync_files_count = await readDirectoryFilesAndUpdateSyncAt(received_sync_directory);
-      console.log(`${sync_files_count} files synced`);
+      console.log(`trying to sync ${sync_files_count} files`);
       const insert_files_count = await readDirectoryFilesAndInsertRecords(received_insert_directory);
-      console.log(`${insert_files_count} files inserted`);
+      console.log(`trying to insert ${insert_files_count} files`);
       const sent_files_count = await getTablesNeedToSyncToRelevantServer({origin: currentServer, destination: objectToArray(chain)});
-      console.log(`${sent_files_count} files sents`);
+      console.log(`trying to sent ${sent_files_count} files`);
       console.log(`***** CLINIC cron-job finished at: ${new Date()}`);
     }
     if (!isClinic) {
       console.log(`***** CHAIN cron-job started running at: ${new Date()}`);
       const sync_files_count = await readDirectoryFilesAndUpdateSyncAt(received_sync_directory);
-      console.log(`${sync_files_count} files synced`);
+      console.log(`trying to sync ${sync_files_count} files`);
       const insert_files_count = await readDirectoryFilesAndInsertRecords(received_insert_directory);
-      console.log(`${insert_files_count} files inserted`);
+      console.log(`trying to insert ${insert_files_count} files`);
       const sent_files_count = await getTablesNeedToSyncToRelevantServer({origin: currentServer, destination: objectToArray(clinics)});
-      console.log(`${sent_files_count} files sents`);
+      console.log(`trying to sent ${sent_files_count} files`);
       console.log(`***** CHAIN cron-job finished at: ${new Date()}`);
     }
   } catch (err) {
