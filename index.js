@@ -179,7 +179,7 @@ const readDirectoryFilesAndInsertRecords = async (insert_directory_path) => {
     const table = path.basename(received_file_path).split('-')[2].toLowerCase();
     const data = await readCSVFile(received_file_path);
     data.forEach(value => {
-      queries.push(upsert(db, {...value, data_json: value['data_json'] && JSON.parse(value['data_json'])}, {id: value.id}, table));
+      queries.push(upsert({...value, data_json: value['data_json'] && JSON.parse(value['data_json'])}, {id: value.id}, table));
     });
     const result = await Promise.all(queries);
     const file_name = `${center_name}-${path.basename(received_file_path).split('-')[0]}-sync_queue-${Date.now()}.csv`

@@ -17,7 +17,6 @@ const init = (seq) => {
     warningZone:{
       type: Sequelize.INTEGER,
       allowNull: true,
-      field: 'warningZone'
     },
     code: {
       type: Sequelize.STRING,
@@ -28,7 +27,7 @@ const init = (seq) => {
       type: Sequelize.UUID,
     },
     product_unit_id: {
-        type: Sequelize.UUID,
+      type: Sequelize.UUID,
     }
   }, {
       tableName: tableName,
