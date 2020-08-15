@@ -3,6 +3,7 @@ const ObjectsToCsv = require('objects-to-csv')
 const fs = require("fs");
 const util = require('util');
 const path = require('path');
+const SetTransactionAsVerified = require('./calculate_moving_price/setTransactionAsVerified');
 const { isClinic, aggregateServers, scp_enabled, CONSUMPTION_ID, CENTRAL_WAREHOUSE_ID, BENCH_STOCK_ID, table_names, clinics} = require('./consts');
 
 function generateCode4CharAZ(element) {
@@ -156,30 +157,32 @@ async function upsert(values, condition, tableName) {
         }
       }
     }
+    const db = require(`./models/index`);
     const Model = require(`./models/${tableName}.model`);
-    const model = await Model.model();
-  
-    const obj = await model.findOne({ where: condition });
-    if(obj) {
-      if (tableName === 'stock_transaction' && !isClinic) {
-        delete values.origin_id;
-        delete values.dest_id;
-      }
-      await obj.update(values);
-      if (tableName === 'stock_transaction' && values.is_verified) {
-        const setTransactionVerify = new SetTransactionVerify();
-        setTransactionVerify.verify(values.id);
-      }
-      if (tableName === 'product') {
-        const ProductInstance = require('./models/product_instance.model');
-        const findAllProductInstances = await ProductInstance.model().findAll({where: {product_id: values.id}});
-        await Promise.all(findAllProductInstances.map(x => ProductInstance.model().update({code: `${values.code}-${x.code.split('-')[1]}`}, {where: {id: x.id}})));
-      }
+    const model = Model.model();
+    return db.sequelize().transaction(async () => {
+      const obj = await model.findOne({ where: condition });
+      if(obj) {
+        if (tableName === 'stock_transaction' && !isClinic) {
+          delete values.origin_id;
+          delete values.dest_id;
+        }
+        await obj.update(values);
+        if (tableName === 'stock_transaction' && values.is_verified === '1') {
+          await new SetTransactionAsVerified().verify(values.id);
+        }
+        if (tableName === 'product') {
+          const ProductInstance = require('./models/product_instance.model');
+          const findAllProductInstances = await ProductInstance.model().findAll({where: {product_id: values.id}});
+          await Promise.all(findAllProductInstances.map(x => ProductInstance.model().update({code: `${values.code}-${x.code.split('-')[1]}`}, {where: {id: x.id}})));
+        }
+        return values.id;
+      } else {
+        await model.create(values);
+      } 
       return values.id;
-    } else {
-      await model.create(values);
-    } 
-    return values.id;
+  });
+
 }
 
 const readCSVFile = async (file_path) => {
